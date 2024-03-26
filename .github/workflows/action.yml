@@ -65,6 +65,7 @@ jobs:
         run: |
           echo "GITHUB_BASE_REF=$GITHUB_BASE_REF"
           echo "GITHUB_SHA=$GITHUB_SHA"
+          echo "git branch=$(git branch)"
 
       - name: Get changed packages 
         id: get_changed_packages
