@@ -1,7 +1,7 @@
 name: Medusa Pipeline
 on:
   pull_request:
-    types: [edited]
+    types: [opened, reopened, synchronize, edited]
     branches:
       - 'feat/improve4-treatment'
 
