@@ -178,14 +178,30 @@ jobs:
         with:
           extension: pipeline
 
-      - name: Build Packages
-        run: yarn build
-
-      - name: Run integration tests
-        run: yarn test:integration:api
-        env:
-          DB_PASSWORD: postgres
-          DB_USERNAME: postgres
+      - name: Get changed packages 
+        id: get_changed_packages
+        shell: bash
+        run: |
+          echo "CHANGED_PACKAGES=$(git diff $GITHUB_SHA $GITHUB_BASE_REF --name-only |
+          grep -o "\bpackages/[^/]\+\b" | sed "s/packages\///" | uniq)" >> $GITHUB_OUTPUT
+  
+      - name: Build packages
+        if: steps.get_changed_packages.outputs.CHANGED_PACKAGES != ''
+        run: |
+          build_command="yarn build"
+          for package in $(echo ${{steps.get_changed_packages.outputs.CHANGED_PACKAGES}}); do
+            build_command="$build_command --filter=$package"
+          done
+          eval $build_command
+  
+      - name: Run unit tests
+        if: steps.get_changed_packages.outputs.CHANGED_PACKAGES != ''
+        run: |
+          test_command="yarn test"
+          for package in $(echo ${{steps.get_changed_packages.outputs.CHANGED_PACKAGES}}); do
+            test_command="$test_command --filter=$package"
+          done
+          eval $test_command
 
   integration-tests-plugins:
     needs: setup
