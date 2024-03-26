@@ -1,6 +1,8 @@
 name: Medusa Pipeline
 on:
   pull_request:
+    branches:
+      - 'feat/improve4-treatment'
 
 jobs:
   setup:
