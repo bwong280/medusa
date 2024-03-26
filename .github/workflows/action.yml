@@ -60,12 +60,17 @@ jobs:
         uses: ./.github/actions/cache-deps
         with:
           extension: pipeline
+        
+      - name: Print variables
+        run: |
+          echo "GITHUB_BASE_REF=$GITHUB_BASE_REF"
+          echo "GITHUB_SHA=$GITHUB_SHA"
 
       - name: Get changed packages 
         id: get_changed_packages
         shell: bash
         run: |
-          echo "CHANGED_PACKAGES=$(git diff $GITHUB_SHA $GITHUB_BASE_REF --name-only |
+          echo "CHANGED_PACKAGES=$(git diff $GITHUB_BASE_REF $GITHUB_SHA --name-only |
           grep -o "\bpackages/[^/]\+\b" | sed "s/packages\///" | uniq)" >> $GITHUB_OUTPUT
     
       - name: Build packages
