@@ -68,11 +68,8 @@ jobs:
           echo "CHANGED_PACKAGES=$CHANGED_PACKAGES" >> $GITHUB_OUTPUT
     
       - name: Build packages
-        if: steps.get_changed_packages.outputs.CHANGED_PACKAGES != ''
         run: |
-          CHANGED_PACKAGES="${{ steps.get_changed_packages.outputs.CHANGED_PACKAGES }}"
-          filter_args=$(./scripts/generate-filter-args.sh $CHANGED_PACKAGES)
-          yarn build $filter_args
+          yarn build
     
       - name: Run unit tests
         if: steps.get_changed_packages.outputs.CHANGED_PACKAGES != ''
