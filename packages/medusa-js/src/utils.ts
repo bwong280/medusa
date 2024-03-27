@@ -33,3 +33,7 @@ export function createAdminPath(path: string) {
 
   return formattedPath
 }
+
+function doSomething() {
+  return 0
+}
