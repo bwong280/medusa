@@ -66,6 +66,7 @@ jobs:
         id: get_changed_packages
         shell: bash
         run: |
+          git checkout $GITHUB_BASE_REF
           CHANGED_PACKAGES=$(./scripts/get-changed-packages.sh)
           echo "CHANGED_PACKAGES=$CHANGED_PACKAGES" >> $GITHUB_OUTPUT
     
