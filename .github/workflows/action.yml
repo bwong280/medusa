@@ -190,6 +190,15 @@ jobs:
         uses: ./.github/actions/cache-deps
         with:
           extension: pipeline
+      
+      - name: Build Packages
+        run: yarn build
+
+      - name: Run integration tests
+        run: yarn test:integration:api
+        env:
+          DB_PASSWORD: postgres
+          DB_USERNAME: postgres
 
   integration-tests-plugins:
     needs: setup
