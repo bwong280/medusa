@@ -78,7 +78,7 @@ jobs:
         if: steps.get_changed_packages.outputs.CHANGED_PACKAGES != ''
         run: |
           CHANGED_PACKAGES="${{ steps.get_changed_packages.outputs.CHANGED_PACKAGES }}"
-          filter_args=./generate-filter-args.sh $CHANGED_PACKAGES
+          filter_args=$(./generate-filter-args.sh $CHANGED_PACKAGES)
           yarn test $filter_args
 
   integration-tests-packages:
