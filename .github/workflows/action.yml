@@ -73,8 +73,8 @@ jobs:
         id: get_changed_packages
         shell: bash
         run: |
-          echo "CHANGED_PACKAGES=$(git diff $GITHUB_BASE_REF $GITHUB_SHA --name-only |
-          grep -o "\bpackages/[^/]\+\b" | sed "s/packages\///" | uniq)" >> $GITHUB_OUTPUT
+          CHANGED_PACKAGES=$(./scripts/get-changed-packages.sh)
+          echo "CHANGED_PACKAGES=$CHANGED_PACKAGES" >> $GITHUB_OUTPUT
     
       - name: Build packages
         if: steps.get_changed_packages.outputs.CHANGED_PACKAGES != ''
