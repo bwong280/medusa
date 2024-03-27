@@ -59,11 +59,24 @@ jobs:
         with:
           extension: pipeline
 
-      - name: Build Packages
-        run: yarn build
-
+      - name: Get changed packages 
+        id: get_changed_packages
+        shell: bash
+        run: |
+          git checkout $GITHUB_BASE_REF
+          CHANGED_PACKAGES=$(./scripts/get-changed-packages.sh)
+          echo "CHANGED_PACKAGES=$CHANGED_PACKAGES" >> $GITHUB_OUTPUT
+    
+      - name: Build packages
+        run: |
+          yarn build
+    
       - name: Run unit tests
-        run: yarn test
+        if: steps.get_changed_packages.outputs.CHANGED_PACKAGES != ''
+        run: |
+          CHANGED_PACKAGES="${{ steps.get_changed_packages.outputs.CHANGED_PACKAGES }}"
+          filter_args=$(./scripts/generate-filter-args.sh $CHANGED_PACKAGES)
+          yarn test $filter_args
 
   integration-tests-packages:
     needs: setup
@@ -177,7 +190,7 @@ jobs:
         uses: ./.github/actions/cache-deps
         with:
           extension: pipeline
-
+      
       - name: Build Packages
         run: yarn build
 
