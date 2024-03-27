@@ -71,7 +71,7 @@ jobs:
         if: steps.get_changed_packages.outputs.CHANGED_PACKAGES != ''
         run: |
           CHANGED_PACKAGES="${{ steps.get_changed_packages.outputs.CHANGED_PACKAGES }}"
-          filter_args=./generate-filter-args.sh $CHANGED_PACKAGES
+          filter_args=$(./generate-filter-args.sh $CHANGED_PACKAGES)
           yarn build $filter_args
     
       - name: Run unit tests
